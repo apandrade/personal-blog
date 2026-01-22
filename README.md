@@ -18,7 +18,7 @@ npm run build
 npm run preview
 ```
 
-Visit: `http://localhost:4322`
+Visit: `http://localhost:4321`
 
 ## ✨ Features
 
