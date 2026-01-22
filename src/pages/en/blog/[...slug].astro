@@ -1,0 +1,32 @@
+---
+import BlogPost from '../../../layouts/BlogPost.astro';
+import { db } from '../../../lib/data';
+
+export async function getStaticPaths() {
+  const paginatedResult = await db.getPosts();
+  
+  return paginatedResult.posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Awaited<ReturnType<typeof db.getPosts>>['posts'][0];
+}
+
+const { post } = Astro.props;
+
+// Convert markdown content to HTML (simple implementation)
+// For production, consider using a proper markdown parser like marked or remark
+const contentHtml = post.content.split('\n\n').map(paragraph => {
+  if (paragraph.startsWith('## ')) {
+    return `<h2>${paragraph.slice(3)}</h2>`;
+  }
+  return `<p>${paragraph}</p>`;
+}).join('\n');
+---
+
+<BlogPost post={post}>
+  <Fragment set:html={contentHtml} />
+</BlogPost>

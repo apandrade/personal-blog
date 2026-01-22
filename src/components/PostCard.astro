@@ -1,7 +1,6 @@
 ---
 import type { PostWithAuthor } from '../types';
 import { formatDate } from '../lib/utils';
-import { localizePath } from 'astro-i18next';
 import { t } from 'i18next';
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 }
 
 const { post, locale } = Astro.props;
-const postUrl = localizePath(`/blog/${post.slug}`);
+const postUrl = locale === 'en' ? `/en/blog/${post.slug}` : `/blog/${post.slug}`;
 ---
 
 <article class="post-card">
