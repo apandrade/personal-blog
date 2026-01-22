@@ -1,6 +1,6 @@
 # Personal Blog - Astro.js
 
-A modern, production-ready personal blog with Medium-inspired design, featuring internationalization (PT/EN), advanced filtering, and database-agnostic architecture.
+A modern, production-ready personal blog with Medium-inspired design, featuring internationalization (PT/EN), client-side filtering, and database-agnostic architecture.
 
 ## 🚀 Quick Start
 
@@ -18,17 +18,20 @@ npm run build
 npm run preview
 ```
 
-Visit: `http://localhost:4321`
+Visit: `http://localhost:4322`
 
 ## ✨ Features
 
 - 🎨 Clean, Medium-inspired design
 - 🌍 Internationalization (Portuguese & English)
-- 🔍 Search, filter by date, sort posts
+- 🔍 Client-side search with real-time filtering
+- 📅 Date filtering (by year/month)
+- 🔄 Sort by newest/oldest
+- 👁️ Grid/list view toggle
+- 📄 Load more pagination (10 posts per page)
 - 📱 Fully responsive
 - 🚀 Blazing fast (Astro.js)
 - 🔌 Database-agnostic architecture
-- 📤 Social sharing
 - 💅 Fully componentized
 
 ## 📁 Project Structure
@@ -37,7 +40,9 @@ Visit: `http://localhost:4321`
 src/
 ├── components/       # Reusable UI components
 ├── layouts/          # Page layouts
-├── pages/            # Routes (index, blog, about, contact)
+├── pages/            # Routes (index, blog, about)
+│   ├── en/          # English routes
+│   └── blog/        # Blog routes
 ├── services/         # Database abstraction
 │   ├── database.interface.ts
 │   └── mock-database.service.ts
@@ -87,7 +92,7 @@ npm install @prisma/client prisma
 # Initialize
 npx prisma init
 
-# Create schema (see DOCUMENTATION.md for full schema)
+# Create schema (see EXAMPLE-prisma-database.service.ts for implementation)
 # Run migration
 npx prisma migrate dev
 
@@ -95,7 +100,7 @@ npx prisma migrate dev
 npx prisma db seed
 ```
 
-See `DOCUMENTATION.md` for complete database integration guide with examples for Prisma, MongoDB, and MySQL.
+See `EXAMPLE-prisma-database.service.ts` for a complete Prisma implementation example.
 
 ## 🎨 Customization
 
@@ -164,34 +169,27 @@ Deploy to:
 
 ## 📚 Pages
 
-- **Home** (`/`): 5 most recent posts
-- **Blog** (`/blog`): All posts with search, filters, sorting
-- **About** (`/sobre` or `/about`): Author information
-- **Contact** (`/contato`): Contact information
-- **Post** (`/blog/[slug]`): Individual post with sharing
+- **Home** (`/` or `/en`): 6 most recent posts
+- **Blog** (`/blog` or `/en/blog`): All posts with client-side search, date filters, sorting, grid/list view, and load more pagination
+- **About** (`/sobre` or `/en/about`): Author information with email contact
+- **Post** (`/blog/[slug]`): Individual blog post
 
 ## 🧩 Components
 
 - `Header`: Navigation with language switcher
-- `Footer`: Simple footer
-- `PostCard`: Post preview card
-- `PostsContainer`: Grid/list view
-- `SearchBar`: Search posts
-- `DateFilter`: Filter by year/month
-- `SortToggle`: Sort newest/oldest
-- `ViewToggle`: Toggle grid/list view
-- `ShareButtons`: Social sharing
-- `LanguageSwitcher`: PT/EN switcher
+- `Footer`: Simple footer with copyright
+- `PostCard`: Post preview card with title, excerpt, date, and tags
+- `LanguageSwitcher`: PT/EN language toggle
+- `BaseLayout`: Main layout wrapper
+- `BlogPost`: Individual blog post layout
 
 ## 📖 Full Documentation
 
-See `DOCUMENTATION.md` for:
-- Complete database integration guide
-- Detailed customization instructions
-- Database schema examples
-- Seeding scripts
-- Best practices
-- Advanced features
+See `EXAMPLE-prisma-database.service.ts` for:
+- Complete Prisma implementation example
+- Database schema structure
+- All DatabaseService interface methods
+- Type definitions
 
 ## 🛠️ Tech Stack
 
@@ -199,7 +197,36 @@ See `DOCUMENTATION.md` for:
 - **TypeScript** - Type safety
 - **astro-i18next** - Internationalization
 - **Faker.js** - Mock data generation
-- **CSS** - No framework, pure CSS
+- **CSS** - Pure CSS, no frameworks
+
+## 🎯 Blog Features
+
+### Client-Side Interactivity
+
+All blog filtering, sorting, and pagination is implemented client-side for instant responsiveness:
+
+- **Search**: Real-time search by title and excerpt
+- **Date Filter**: Filter posts by year and month
+- **Sort**: Toggle between newest and oldest first
+- **View Mode**: Switch between grid and list layouts
+- **Pagination**: Load more posts (10 per page)
+
+### Database Architecture
+
+The blog uses a database-agnostic interface pattern:
+
+```typescript
+interface DatabaseService {
+  getAuthor(): Promise<Author>;
+  getPosts(filters?: PostFilters): Promise<Post[]>;
+  getPostBySlug(slug: string): Promise<Post | null>;
+  getRecentPosts(limit: number): Promise<Post[]>;
+  getAvailableDates(): Promise<AvailableDate[]>;
+  getPageContent(page: string, locale: 'pt' | 'en'): Promise<PageContent>;
+}
+```
+
+This allows easy switching between mock data (Faker), Prisma, MongoDB, or any other database.
 
 ## 📄 License
 
@@ -207,6 +234,6 @@ MIT License - Free to use for personal projects
 
 ---
 
-**Note**: This blog is ready for production. Simply connect your database using the provided interface and you're good to go!
+**Note**: This blog is ready for production. Simply implement the DatabaseService interface with your preferred database and you're good to go!
 
-For questions or issues, check `DOCUMENTATION.md` or the code comments.
+For implementation examples, check `EXAMPLE-prisma-database.service.ts`.
