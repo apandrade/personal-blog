@@ -1,0 +1,30 @@
+---
+const today = new Date();
+---
+
+<footer>
+	<div class="container">
+		<p class="copyright">&copy; {today.getFullYear()} Personal Blog. All rights reserved.</p>
+	</div>
+</footer>
+<style>
+	footer {
+		background: #fafafa;
+		border-top: 1px solid #e6e6e6;
+		padding: 2rem 0;
+		margin-top: 4rem;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.copyright {
+		color: #666;
+		font-size: 0.9rem;
+		text-align: center;
+		margin: 0;
+	}
+</style>

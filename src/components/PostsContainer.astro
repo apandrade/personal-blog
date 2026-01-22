@@ -1,0 +1,39 @@
+---
+import type { PostWithAuthor } from '../types';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: PostWithAuthor[];
+  locale: string;
+  viewMode: 'grid' | 'list';
+}
+
+const { posts, locale, viewMode } = Astro.props;
+---
+
+<div class={`posts-container view-${viewMode}`}>
+  {posts.map(post => (
+    <PostCard post={post} locale={locale} />
+  ))}
+</div>
+
+<style>
+  .posts-container {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .view-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  .view-list {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 768px) {
+    .posts-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

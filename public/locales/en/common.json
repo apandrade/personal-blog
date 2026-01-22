@@ -1,0 +1,33 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog",
+    "readMore": "Read more",
+    "share": "Share",
+    "search": "Search posts...",
+    "newestFirst": "Newest first",
+    "oldestFirst": "Oldest first",
+    "viewGrid": "Grid view",
+    "viewList": "List view",
+    "filterByDate": "Filter by date",
+    "allPosts": "All posts",
+    "publishedOn": "Published on"
+  },
+  "blog": {
+    "title": "Blog",
+    "recentPosts": "Recent Posts",
+    "noPosts": "No posts found",
+    "searchResults": "Search results for",
+    "author": "Author"
+  },
+  "about": {
+    "title": "About Me",
+    "description": "Learn more about the author"
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "Get in touch"
+  }
+}

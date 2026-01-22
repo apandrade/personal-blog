@@ -1,0 +1,33 @@
+{
+  "common": {
+    "home": "Início",
+    "about": "Sobre",
+    "contact": "Contato",
+    "blog": "Blog",
+    "readMore": "Leia mais",
+    "share": "Compartilhar",
+    "search": "Buscar posts...",
+    "newestFirst": "Mais recentes",
+    "oldestFirst": "Mais antigos",
+    "viewGrid": "Visualização em grade",
+    "viewList": "Visualização em lista",
+    "filterByDate": "Filtrar por data",
+    "allPosts": "Todos os posts",
+    "publishedOn": "Publicado em"
+  },
+  "blog": {
+    "title": "Blog",
+    "recentPosts": "Posts Recentes",
+    "noPosts": "Nenhum post encontrado",
+    "searchResults": "Resultados da busca por",
+    "author": "Autor"
+  },
+  "about": {
+    "title": "Sobre Mim",
+    "description": "Saiba mais sobre o autor"
+  },
+  "contact": {
+    "title": "Contato",
+    "description": "Entre em contato"
+  }
+}

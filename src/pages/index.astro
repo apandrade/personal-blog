@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { db } from '../lib/data';
+import { changeLanguage, t } from 'i18next';
+
+// Switch to Portuguese
+await changeLanguage('pt');
+
+const currentLocale = Astro.currentLocale || 'pt';
+const recentPosts = await db.getRecentPosts(6);
+const pageContent = await db.getPageContent('home', currentLocale as 'pt' | 'en');
+---
+
+<BaseLayout 
+  title={t('common.home')} 
+  description="Personal blog with recent posts"
+>
+  <div class="home-page">
+    <div class="container">
+      <section class="hero">
+        <h1 class="hero-title">{pageContent.title}</h1>
+        <p class="hero-description">
+          {pageContent.subtitle}
+        </p>
+      </section>
+
+      <section class="recent-posts">
+        <h2 class="section-title">{t('blog.recentPosts')}</h2>
+        <div class="posts-grid">
+          {recentPosts.map(post => (
+            <PostCard post={post} locale={currentLocale} />
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .home-page {
+    padding: 3rem 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+    margin-bottom: 4rem;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    color: #000;
+    line-height: 1.2;
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .recent-posts {
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #000;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

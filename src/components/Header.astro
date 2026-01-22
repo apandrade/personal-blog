@@ -1,0 +1,150 @@
+---
+import { localizePath } from 'astro-i18next';
+import { t } from 'i18next';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+// Helper function to get active class
+const isActive = (path: string) => {
+  if (path === '/') return currentPath === '/';
+  if (path === '/blog') return currentPath.startsWith('/blog');
+  if (path === '/sobre') return currentPath === '/sobre' || currentPath === '/about';
+  return false;
+};
+---
+
+<header>
+	<div class="container">
+		<nav>
+			<a href={localizePath('/')} class="logo">
+				<span class="logo-text">Personal Blog</span>
+			</a>
+			
+			<ul class="nav-links">
+				<li>
+					<a 
+						href={localizePath('/')} 
+						class={`nav-link ${isActive('/') ? 'active' : ''}`}
+					>
+						{t('common.home')}
+					</a>
+				</li>
+				<li>
+					<a 
+						href={localizePath('/blog')} 
+						class={`nav-link ${isActive('/blog') ? 'active' : ''}`}
+					>
+						{t('common.blog')}
+					</a>
+				</li>
+				<li>
+					<a 
+						href={localizePath('/sobre')} 
+						class={`nav-link ${isActive('/sobre') ? 'active' : ''}`}
+					>
+						{t('common.about')}
+					</a>
+				</li>
+			</ul>
+
+			<div class="nav-actions">
+				<slot name="language-switcher" />
+			</div>
+		</nav>
+	</div>
+</header>
+<style>
+	header {
+		background: #fff;
+		border-bottom: 1px solid #e6e6e6;
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		backdrop-filter: blur(10px);
+		background: rgba(255, 255, 255, 0.95);
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 70px;
+	}
+
+	.logo {
+		text-decoration: none;
+		color: #000;
+		font-size: 1.5rem;
+		font-weight: 700;
+		transition: opacity 0.2s;
+	}
+
+	.logo:hover {
+		opacity: 0.7;
+	}
+
+	.logo-text {
+		display: inline-block;
+	}
+
+	.nav-links {
+		display: flex;
+		list-style: none;
+		gap: 2rem;
+		margin: 0;
+		padding: 0;
+	}
+
+	.nav-link {
+		color: #666;
+		text-decoration: none;
+		font-size: 0.95rem;
+		transition: color 0.2s;
+		padding: 0.5rem 0;
+		border-bottom: 2px solid transparent;
+	}
+
+	.nav-link:hover {
+		color: #000;
+	}
+
+	.nav-link.active {
+		color: #000;
+		border-bottom-color: #000;
+	}
+
+	.nav-actions {
+		display: flex;
+		align-items: center;
+	}
+
+	@media (max-width: 768px) {
+		nav {
+			flex-wrap: wrap;
+			height: auto;
+			padding: 1rem 0;
+		}
+
+		.nav-links {
+			order: 3;
+			width: 100%;
+			flex-direction: column;
+			gap: 0.5rem;
+			margin-top: 1rem;
+		}
+
+		.logo {
+			font-size: 1.25rem;
+		}
+	}
+</style>

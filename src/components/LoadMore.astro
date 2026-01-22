@@ -1,0 +1,67 @@
+---
+import { t } from 'i18next';
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  totalPosts: number;
+}
+
+const { currentPage, totalPages, totalPosts } = Astro.props;
+const hasMore = currentPage < totalPages;
+---
+
+{hasMore && (
+  <div class="load-more">
+    <button class="load-more-button" data-page={currentPage + 1}>
+      Load More Posts
+    </button>
+    <p class="posts-info">
+      Showing {currentPage * 10} of {totalPosts} posts
+    </p>
+  </div>
+)}
+
+<script>
+  const loadMoreButton = document.querySelector('.load-more-button');
+  
+  if (loadMoreButton) {
+    loadMoreButton.addEventListener('click', () => {
+      const nextPage = loadMoreButton.getAttribute('data-page');
+      const url = new URL(window.location.href);
+      url.searchParams.set('page', nextPage || '1');
+      window.location.href = url.toString();
+    });
+  }
+</script>
+
+<style>
+  .load-more {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .load-more-button {
+    padding: 1rem 2rem;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .load-more-button:hover {
+    opacity: 0.8;
+  }
+
+  .posts-info {
+    color: #666;
+    font-size: 0.875rem;
+  }
+</style>

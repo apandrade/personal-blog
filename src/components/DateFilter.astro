@@ -1,0 +1,116 @@
+---
+import { t } from 'i18next';
+import { getMonthName } from '../lib/utils';
+
+interface Props {
+  availableDates: { year: number; month: number }[];
+  selectedYear?: number;
+  selectedMonth?: number;
+  locale: string;
+}
+
+const { availableDates, selectedYear, selectedMonth, locale } = Astro.props;
+
+// Group dates by year
+const datesByYear = availableDates.reduce((acc, date) => {
+  if (!acc[date.year]) {
+    acc[date.year] = [];
+  }
+  if (!acc[date.year].includes(date.month)) {
+    acc[date.year].push(date.month);
+  }
+  return acc;
+}, {} as Record<number, number[]>);
+
+const years = Object.keys(datesByYear).map(Number).sort((a, b) => b - a);
+---
+
+<div class="date-filter">
+  <h3 class="filter-title">{t('common:filterByDate')}</h3>
+  
+  <form method="get" class="filter-form">
+    <select name="year" id="year" class="filter-select">
+      <option value="">{t('common:allPosts')}</option>
+      {years.map(year => (
+        <option value={year} selected={selectedYear === year}>
+          {year}
+        </option>
+      ))}
+    </select>
+
+    {selectedYear && (
+      <select name="month" id="month" class="filter-select">
+        <option value="">All months</option>
+        {datesByYear[selectedYear]?.sort((a, b) => b - a).map(month => (
+          <option value={month} selected={selectedMonth === month}>
+            {getMonthName(month, locale)}
+          </option>
+        ))}
+      </select>
+    )}
+
+    <button type="submit" class="filter-button">Filter</button>
+  </form>
+</div>
+
+<script>
+  const yearSelect = document.getElementById('year') as HTMLSelectElement;
+  
+  if (yearSelect) {
+    yearSelect.addEventListener('change', () => {
+      const form = yearSelect.closest('form');
+      if (form) {
+        form.submit();
+      }
+    });
+  }
+</script>
+
+<style>
+  .date-filter {
+    margin-bottom: 2rem;
+  }
+
+  .filter-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .filter-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: #000;
+  }
+
+  .filter-button {
+    padding: 0.75rem 1.5rem;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+  }
+
+  .filter-button:hover {
+    opacity: 0.8;
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import type { PostWithAuthor } from '../types';
+import { formatDate } from '../lib/utils';
+import { localizePath } from 'astro-i18next';
+import { t } from 'i18next';
+
+interface Props {
+  post: PostWithAuthor;
+  locale: string;
+}
+
+const { post, locale } = Astro.props;
+const postUrl = localizePath(`/blog/${post.slug}`);
+---
+
+<article class="post-card">
+  <a href={postUrl} class="post-card-link">
+    <div class="post-card-image">
+      <img src={post.coverImage} alt={post.title} loading="lazy" />
+    </div>
+    <div class="post-card-content">
+      <h2 class="post-card-title">{post.title}</h2>
+      <p class="post-card-excerpt">{post.excerpt}</p>
+      <div class="post-card-meta">
+        <time datetime={post.publishedAt.toISOString()}>
+          {formatDate(post.publishedAt, locale)}
+        </time>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .post-card {
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e6e6e6;
+  }
+
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .post-card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  .post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .post-card:hover .post-card-image img {
+    transform: scale(1.05);
+  }
+
+  .post-card-content {
+    padding: 1.5rem;
+  }
+
+  .post-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+    color: #000;
+  }
+
+  .post-card-excerpt {
+    color: #666;
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #999;
+  }
+</style>
